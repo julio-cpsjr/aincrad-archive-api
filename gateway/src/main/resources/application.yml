@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+
+            - id: books-service
+              uri: http://books-service:8081
+              predicates:
+                - Path=/books/**
+              filters:
+                - name: StripPrefix
+                  args:
+                      parts: 1
+
+            - id: users-service
+              uri: http://users-service:8082
+              predicates:
+                - Path=/users/**
+              filters:
+                - name: StripPrefix
+                  args:
+                      parts: 1
+
+            - id: loans-service
+              uri: http://loans-service:8083
+              predicates:
+                - Path=/loans/**
+              filters:
+                - name: StripPrefix
+                  args:
+                      parts: 1
+
+
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Books Service
+        url: /books/v3/api-docs
+      - name: Users Service
+        url: /users/v3/api-docs
+      - name: Loans Service
+        url: /loans/v3/api-docs
